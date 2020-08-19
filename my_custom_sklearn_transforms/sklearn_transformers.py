@@ -1,10 +1,6 @@
-! pip install imbalanced-learn
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from scipy.stats.mstats import winsorize
-import imblearn
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline
 
 # All sklearn Transforms must have the `transform` and `fit` methods
 class DropColumns(BaseEstimator, TransformerMixin):
