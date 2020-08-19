@@ -21,11 +21,11 @@ class preprocessamento_1(BaseEstimator):
     def __init__(self, my_df):
         self.my_df = my_df
     
-    def fit(self, documents, y=None):
+    def fit(self, X, y=None):
         return self
 
-    def transform(self, data):
-        data = Xmy_df.copy()
+    def transform(self, X):
+        data = X.copy()
         
       # Winsorizando ("encapsulando") as notas entre 0 e 10.
         lim_inf_1 = len(data[data['NOTA_DE']==0.0])/len(data)
