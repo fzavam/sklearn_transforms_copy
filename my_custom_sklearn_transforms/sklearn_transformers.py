@@ -21,27 +21,26 @@ class preprocessamento_1(object):
     def __init__(self, df):
         self.df = df
     
-        data = df.copy()
-        
+                
       # Winsorizando ("encapsulando") as notas entre 0 e 10.
     
-        lim_inf_1 = len(data[data['NOTA_DE']==0.0])/len(data)
-        lim_sup_1 = len(data[data['NOTA_DE']> 10.0])/len(data)
-        data['NOTA_DE'] = winsorize(data['NOTA_DE'], limits=[lim_inf_1, lim_sup_1] )
+        lim_inf_1 = len(df[df['NOTA_DE']==0.0])/len(df)
+        lim_sup_1 = len(df[df['NOTA_DE']> 10.0])/len(df)
+        df['NOTA_DE'] = winsorize(df['NOTA_DE'], limits=[lim_inf_1, lim_sup_1] )
 
-        lim_inf_2 = len(data[data['NOTA_EM']==0.0])/len(data)
-        lim_sup_2 = len(data[data['NOTA_EM']> 10.0])/len(data)
-        data['NOTA_EM'] = winsorize(data['NOTA_EM'], limits=[lim_inf_2, lim_sup_2] )
+        lim_inf_2 = len(df[df['NOTA_EM']==0.0])/len(df)
+        lim_sup_2 = len(df[df['NOTA_EM']> 10.0])/len(df)
+        df['NOTA_EM'] = winsorize(df['NOTA_EM'], limits=[lim_inf_2, lim_sup_2] )
 
-        lim_inf_3 = len(data[data['NOTA_MF']==0.0])/len(data)
-        lim_sup_3 = len(data[data['NOTA_MF']> 10.0])/len(data)
-        data['NOTA_MF'] = winsorize(data['NOTA_MF'], limits=[lim_inf_3, lim_sup_3] )
+        lim_inf_3 = len(df[df['NOTA_MF']==0.0])/len(df)
+        lim_sup_3 = len(df[df['NOTA_MF']> 10.0])/len(df)
+        df['NOTA_MF'] = winsorize(df['NOTA_MF'], limits=[lim_inf_3, lim_sup_3] )
 
-        lim_inf_4 = len(data[data['NOTA_GO']==0.0])/len(data)
-        lim_sup_4 = len(data[data['NOTA_GO']> 10.0])/len(data)
-        data['NOTA_GO'] = winsorize(data['NOTA_GO'], limits=[lim_inf_4, lim_sup_4] )
+        lim_inf_4 = len(df[df['NOTA_GO']==0.0])/len(df)
+        lim_sup_4 = len(df[df['NOTA_GO']> 10.0])/len(df)
+        df['NOTA_GO'] = winsorize(df['NOTA_GO'], limits=[lim_inf_4, lim_sup_4] )
 
-        return data
+        return df
 
                      
  class matricula(object): 
