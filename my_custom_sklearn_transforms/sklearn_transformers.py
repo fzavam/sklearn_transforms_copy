@@ -57,11 +57,4 @@ class preprocessamento_1(BaseEstimator):
         
         return data
 
-class Smote_resample(object):
-    def __init__(self):
-        pass
 
-    def fit(self, X, y):
-        X_sm, y_sm = SMOTE('all').fit_resample(X, y)
-        X_sm = pd.DataFrame(X_sm, columns=X.columns)
-        return X_sm, y_sm
