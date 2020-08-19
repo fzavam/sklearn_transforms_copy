@@ -16,16 +16,12 @@ class DropColumns(BaseEstimator, TransformerMixin):
         # Retornamos um novo dataframe sem as colunas indesejadas
         return data.drop(labels=self.columns, axis='columns')
 
-class preprocessamento_1(BaseEstimator):
+class preprocessamento_1(object):
 
-    def __init__(self, my_df):
-        self.my_df = my_df
+    def __init__(self, df_name):
+        self.data = df_name
     
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        data = X.copy()
+        data = my_df.copy()
         
       # Winsorizando ("encapsulando") as notas entre 0 e 10.
         lim_inf_1 = len(data[data['NOTA_DE']==0.0])/len(data)
