@@ -1,5 +1,8 @@
 from sklearn.base import BaseEstimator, TransformerMixin
-
+from scipy.stats.mstats import winsorize
+import imblearn
+from imblearn.over_sampling import SMOTE
+from imblearn.pipeline import Pipeline
 
 # All sklearn Transforms must have the `transform` and `fit` methods
 class DropColumns(BaseEstimator, TransformerMixin):
@@ -20,34 +23,45 @@ class preprocessamento_1(BaseEstimator):
     def __init__(self):
         pass
 
-    def fit(self, documents, y=None):
+    def fit(self, X, y=None):
         return self
 
-    def transform(self, x_dataset):
+    def transform(self, data):
+        data = X.copy()
+        
       # Winsorizando ("encapsulando") as notas entre 0 e 10.
-        lim_inf_1 = len(x_dataset[x_dataset['NOTA_DE']==0.0])/len(x_dataset)
-        lim_sup_1 = len(x_dataset[x_dataset['NOTA_DE']> 10.0])/len(x_dataset)
-        x_dataset['NOTA_DE'] = winsorize(x_dataset['NOTA_DE'], limits=[lim_inf_1, lim_sup_1] )
+        lim_inf_1 = len(data[data['NOTA_DE']==0.0])/len(data)
+        lim_sup_1 = len(data[data['NOTA_DE']> 10.0])/len(data)
+        data['NOTA_DE'] = winsorize(data['NOTA_DE'], limits=[lim_inf_1, lim_sup_1] )
 
-        lim_inf_2 = len(x_dataset[x_dataset['NOTA_EM']==0.0])/len(x_dataset)
-        lim_sup_2 = len(x_dataset[x_dataset['NOTA_EM']> 10.0])/len(x_dataset)
-        x_dataset['NOTA_EM'] = winsorize(x_dataset['NOTA_EM'], limits=[lim_inf_2, lim_sup_2] )
+        lim_inf_2 = len(data[data['NOTA_EM']==0.0])/len(data)
+        lim_sup_2 = len(data[data['NOTA_EM']> 10.0])/len(data)
+        data['NOTA_EM'] = winsorize(data['NOTA_EM'], limits=[lim_inf_2, lim_sup_2] )
 
-        lim_inf_3 = len(x_dataset[x_dataset['NOTA_MF']==0.0])/len(x_dataset)
-        lim_sup_3 = len(x_dataset[x_dataset['NOTA_MF']> 10.0])/len(x_dataset)
-        x_dataset['NOTA_MF'] = winsorize(x_dataset['NOTA_MF'], limits=[lim_inf_3, lim_sup_3] )
+        lim_inf_3 = len(data[data['NOTA_MF']==0.0])/len(data)
+        lim_sup_3 = len(data[data['NOTA_MF']> 10.0])/len(data)
+        data['NOTA_MF'] = winsorize(data['NOTA_MF'], limits=[lim_inf_3, lim_sup_3] )
 
-        lim_inf_4 = len(x_dataset[x_dataset['NOTA_GO']==0.0])/len(x_dataset)
-        lim_sup_4 = len(x_dataset[x_dataset['NOTA_GO']> 10.0])/len(x_dataset)
-        x_dataset['NOTA_GO'] = winsorize(x_dataset['NOTA_GO'], limits=[lim_inf_4, lim_sup_4] )
+        lim_inf_4 = len(data[data['NOTA_GO']==0.0])/len(data)
+        lim_sup_4 = len(data[data['NOTA_GO']> 10.0])/len(data)
+        data['NOTA_GO'] = winsorize(data['NOTA_GO'], limits=[lim_inf_4, lim_sup_4] )
 
       # Usando a coluna MATRICULA que é irrelevante para somar os valores da reprovação
-        x_dataset['MATRICULA'] = x_dataset['REPROVACOES_DE'] + x_dataset['REPROVACOES_EM'] + x_dataset['REPROVACOES_MF'] + x_dataset['REPROVACOES_GO']
+        data['MATRICULA'] = data['REPROVACOES_DE'] + data['REPROVACOES_EM'] + data['REPROVACOES_MF'] + data['REPROVACOES_GO']
 
       # Preenchendo as notas faltantes pela média das outras notas do aluno
-        x_dataset['NOTA_GO'] = x_dataset['NOTA_GO'].fillna(x_dataset[['NOTA_DE', 'NOTA_EM', 'NOTA_MF']].mean(axis=1))
-        x_dataset['NOTA_DE'] = x_dataset['NOTA_DE'].fillna(x_dataset[['NOTA_GO', 'NOTA_EM', 'NOTA_MF']].mean(axis=1))
-        x_dataset['NOTA_EM'] = x_dataset['NOTA_EM'].fillna(x_dataset[['NOTA_DE', 'NOTA_GO', 'NOTA_MF']].mean(axis=1))
-        x_dataset['NOTA_MF'] = x_dataset['NOTA_MF'].fillna(x_dataset[['NOTA_DE', 'NOTA_EM', 'NOTA_GO']].mean(axis=1))
+        data['NOTA_GO'] = data['NOTA_GO'].fillna(data[['NOTA_DE', 'NOTA_EM', 'NOTA_MF']].mean(axis=1))
+        data['NOTA_DE'] = data['NOTA_DE'].fillna(data[['NOTA_GO', 'NOTA_EM', 'NOTA_MF']].mean(axis=1))
+        data['NOTA_EM'] = data['NOTA_EM'].fillna(data[['NOTA_DE', 'NOTA_GO', 'NOTA_MF']].mean(axis=1))
+        data['NOTA_MF'] = data['NOTA_MF'].fillna(data[['NOTA_DE', 'NOTA_EM', 'NOTA_GO']].mean(axis=1))
         
-        return x_dataset
+        return data
+
+class Smote_resample(object):
+    def __init__(self):
+        pass
+
+    def fit(self, X, y):
+        X_sm, y_sm = SMOTE('all').fit_resample(X, y)
+        X_sm = pd.DataFrame(X_sm, columns=X.columns)
+        return X_sm, y_sm
