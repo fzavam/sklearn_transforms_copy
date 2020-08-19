@@ -1,3 +1,5 @@
+! pip install imbalanced-learn
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from scipy.stats.mstats import winsorize
 import imblearn
