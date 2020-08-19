@@ -18,12 +18,13 @@ class DropColumns(BaseEstimator, TransformerMixin):
 
 class preprocessamento_1(object):
 
-    def __init__(self, df_name):
-        self.data = df_name
+    def __init__(self, df):
+        self.df = df
     
-        data = my_df.copy()
+        data = df.copy()
         
       # Winsorizando ("encapsulando") as notas entre 0 e 10.
+    
         lim_inf_1 = len(data[data['NOTA_DE']==0.0])/len(data)
         lim_sup_1 = len(data[data['NOTA_DE']> 10.0])/len(data)
         data['NOTA_DE'] = winsorize(data['NOTA_DE'], limits=[lim_inf_1, lim_sup_1] )
@@ -40,6 +41,15 @@ class preprocessamento_1(object):
         lim_sup_4 = len(data[data['NOTA_GO']> 10.0])/len(data)
         data['NOTA_GO'] = winsorize(data['NOTA_GO'], limits=[lim_inf_4, lim_sup_4] )
 
+        return data
+
+                     
+ class matricula(object): 
+        def __init__(self, df):
+        self.data = df
+    
+        data = my_df.copy()              
+                     
       # Usando a coluna MATRICULA que é irrelevante para somar os valores da reprovação
         data['MATRICULA'] = data['REPROVACOES_DE'] + data['REPROVACOES_EM'] + data['REPROVACOES_MF'] + data['REPROVACOES_GO']
 
