@@ -19,7 +19,7 @@ class DropColumns(BaseEstimator, TransformerMixin):
 class preprocessamento_1(BaseEstimator):
 
     def __init__(self):
-        pass
+        return
 
     def fit(self, X, y=None):
         return self
